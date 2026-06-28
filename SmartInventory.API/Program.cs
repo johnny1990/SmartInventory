@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using SmartInventory.Application.Handlers;
+using SmartInventory.Infrastructure.Interfaces;
 using SmartInventory.Infrastructure.Persistence;
+using SmartInventory.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +23,13 @@ builder.Services.AddDbContext<SmartInventoryDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+// Register Handlers
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetProductsHandler).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateProductHandler).Assembly));
+
+// Register Repositories
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 var app = builder.Build();
 
