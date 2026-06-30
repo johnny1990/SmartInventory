@@ -19,6 +19,11 @@ namespace SmartInventory.Application.Handlers
             CreateProductCommand request,
             CancellationToken cancellationToken)
         {
+            if (string.IsNullOrWhiteSpace(request.Name))
+            {
+                throw new ArgumentException("Product name cannot be empty.", nameof(request.Name));
+            }
+
             var product = new Product
             {
                 Id = Guid.NewGuid(),
