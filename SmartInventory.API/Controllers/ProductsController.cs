@@ -34,5 +34,22 @@ namespace SmartInventory.API.Controllers
 
             return Ok(id);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(
+    UpdateProductCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            return Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _mediator.Send(new DeleteProductCommand(id));
+
+            return Ok(result);
+        }
     }
 }

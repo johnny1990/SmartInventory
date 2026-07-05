@@ -1,5 +1,7 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using SmartInventory.Application.Handlers;
+using SmartInventory.Application.Validators;
 using SmartInventory.Infrastructure.Interfaces;
 using SmartInventory.Infrastructure.Persistence;
 using SmartInventory.Infrastructure.Repositories;
@@ -29,7 +31,12 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetPr
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateProductHandler).Assembly));
 
 // Register Repositories
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+// Register Validators
+builder.Services.AddValidatorsFromAssembly(
+    typeof(CreateProductCommandValidator).Assembly);
 
 var app = builder.Build();
 
