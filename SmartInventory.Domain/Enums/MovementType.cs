@@ -2,6 +2,7 @@
 
 public enum MovementType
 {
-    In = 1,
-    Out = 2
+    StockIn = 1,
+    StockOut = 2,
+    Adjustment = 3
 }
