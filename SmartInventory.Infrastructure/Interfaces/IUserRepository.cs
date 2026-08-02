@@ -7,6 +7,7 @@ namespace SmartInventory.Infrastructure.Interfaces
         Task<User?> GetByUsernameAsync(string username);
 
         Task<User?> GetByEmailAsync(string email);
+        Task<User?> GetByIdAsync(Guid id);
 
         Task AddAsync(User user);
     }

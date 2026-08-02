@@ -28,6 +28,14 @@ namespace SmartInventory.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var result =
+                await _mediator.Send(new GetProductByIdQuery(id));
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(
             CreateProductCommand command)
@@ -37,10 +45,14 @@ namespace SmartInventory.API.Controllers
             return Ok(id);
         }
 
-        [HttpPut]
+        [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update(
+    Guid id,
     UpdateProductCommand command)
         {
+            if (id != command.Id)
+                return BadRequest("Route id and body id do not match.");
+
             var result = await _mediator.Send(command);
 
             return Ok(result);

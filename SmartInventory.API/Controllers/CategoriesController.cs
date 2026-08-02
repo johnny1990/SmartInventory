@@ -51,10 +51,14 @@ namespace SmartInventory.API.Controllers
             return Ok(id);
         }
 
-        [HttpPut]
+        [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update(
+            Guid id,
             UpdateCategoryCommand command)
         {
+            if (id != command.Id)
+                return BadRequest("Route id and body id do not match.");
+
             var updated =
                 await _mediator.Send(command);
 
