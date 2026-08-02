@@ -1,4 +1,5 @@
 ﻿using SmartInventory.Domain.Entities;
+using SmartInventory.Infrastructure.Common;
 
 namespace SmartInventory.Infrastructure.Interfaces
 {
@@ -6,7 +7,7 @@ namespace SmartInventory.Infrastructure.Interfaces
     {
         Task<Product> AddAsync(Product product);
 
-        Task<List<Product>> GetAllAsync();
+        Task<List<Product>> GetAllAsync(ProductSearchParameters parameters);
 
         Task<Product?> GetByIdAsync(Guid id);
 

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartInventory.Application.Commands;
 using SmartInventory.Application.Queries;
+using SmartInventory.Infrastructure.Common;
 
 namespace SmartInventory.API.Controllers
 {
@@ -20,10 +21,12 @@ namespace SmartInventory.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(
+    [FromQuery] ProductSearchParameters parameters)
         {
             var result =
-                await _mediator.Send(new GetProductsQuery());
+                await _mediator.Send(
+                    new GetProductsQuery(parameters));
 
             return Ok(result);
         }

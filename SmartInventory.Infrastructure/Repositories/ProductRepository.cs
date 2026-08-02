@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartInventory.Domain.Entities;
+using SmartInventory.Infrastructure.Common;
 using SmartInventory.Infrastructure.Interfaces;
 using SmartInventory.Infrastructure.Persistence;
 
@@ -20,11 +21,60 @@ namespace SmartInventory.Infrastructure.Repositories
             return product;
         }
 
-        public async Task<List<Product>> GetAllAsync()
+        public async Task<List<Product>> GetAllAsync(ProductSearchParameters parameters)
         {
-            return await _context.Products
+            var query = _context.Products
+                .Include(x => x.Category)
                 .AsNoTracking()
-                .ToListAsync();
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(parameters.Search))
+            {
+                query = query.Where(x =>
+                    x.Name.Contains(parameters.Search) ||
+                    x.SKU.Contains(parameters.Search));
+            }
+
+            if (parameters.CategoryId.HasValue)
+            {
+                query = query.Where(x =>
+                    x.CategoryId == parameters.CategoryId.Value);
+            }
+
+            if (parameters.MinPrice.HasValue)
+            {
+                query = query.Where(x =>
+                    x.Price >= parameters.MinPrice.Value);
+            }
+
+            if (parameters.MaxPrice.HasValue)
+            {
+                query = query.Where(x =>
+                    x.Price <= parameters.MaxPrice.Value);
+            }
+
+            query = parameters.SortBy?.ToLower() switch
+            {
+                "price" when parameters.Descending =>
+                    query.OrderByDescending(x => x.Price),
+
+                "price" =>
+                    query.OrderBy(x => x.Price),
+
+                "name" when parameters.Descending =>
+                    query.OrderByDescending(x => x.Name),
+
+                "name" =>
+                    query.OrderBy(x => x.Name),
+
+                _ => query.OrderBy(x => x.Name)
+            };
+
+            query = query
+                .Skip((parameters.Page - 1) * parameters.PageSize)
+                .Take(parameters.PageSize);
+
+            return await query.ToListAsync();
         }
 
         public async Task<Product?> GetByIdAsync(Guid id)

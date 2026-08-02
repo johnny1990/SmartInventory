@@ -16,10 +16,11 @@ namespace SmartInventory.Application.Handlers
         }
 
         public async Task<List<ProductDto>> Handle(
-            GetProductsQuery request,
-            CancellationToken cancellationToken)
+    GetProductsQuery request,
+    CancellationToken cancellationToken)
         {
-            var products = await _repository.GetAllAsync();
+            var products = await _repository
+                .GetAllAsync(request.SearchParameters);
 
             return products.Select(x => new ProductDto
             {
@@ -28,7 +29,8 @@ namespace SmartInventory.Application.Handlers
                 SKU = x.SKU,
                 Price = x.Price,
                 QuantityInStock = x.QuantityInStock,
-                CategoryId = x.CategoryId
+                CategoryId = x.CategoryId,
+                CategoryName = x.Category.Name
             }).ToList();
         }
     }
