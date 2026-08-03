@@ -4,7 +4,6 @@ using SmartInventory.Infrastructure.Common;
 
 namespace SmartInventory.Application.Queries
 {
-public record GetProductsQuery(
-    ProductSearchParameters SearchParameters)
-    : IRequest<List<ProductDto>>;
+    public record GetProductsQuery(ProductSearchParameters SearchParameters)
+        : IRequest<PagedResult<ProductDto>>;
 }

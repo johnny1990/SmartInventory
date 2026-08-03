@@ -21,7 +21,7 @@ namespace SmartInventory.Infrastructure.Repositories
             return product;
         }
 
-        public async Task<List<Product>> GetAllAsync(ProductSearchParameters parameters)
+        public async Task<(List<Product> Products, int TotalCount)> GetAllAsync(ProductSearchParameters parameters)
         {
             var query = _context.Products
                 .Include(x => x.Category)
@@ -70,11 +70,14 @@ namespace SmartInventory.Infrastructure.Repositories
                 _ => query.OrderBy(x => x.Name)
             };
 
-            query = query
-                .Skip((parameters.Page - 1) * parameters.PageSize)
-                .Take(parameters.PageSize);
+            var totalCount = await query.CountAsync();
 
-            return await query.ToListAsync();
+            var products = await query
+                .Skip((parameters.Page - 1) * parameters.PageSize)
+                .Take(parameters.PageSize)
+                .ToListAsync();
+
+            return (products, totalCount);
         }
 
         public async Task<Product?> GetByIdAsync(Guid id)

@@ -20,15 +20,15 @@ namespace SmartInventory.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get(
-    [FromQuery] ProductSearchParameters parameters)
-        {
-            var result =
-                await _mediator.Send(
-                    new GetProductsQuery(parameters));
+            [HttpGet]
+            public async Task<IActionResult> Get(
+        [FromQuery] ProductSearchParameters parameters)
+            {
+                var result =
+                    await _mediator.Send(
+                        new GetProductsQuery(parameters));
 
-            return Ok(result);
+                return Ok(result);
         }
 
         [HttpGet("{id}")]
