@@ -8,13 +8,17 @@ namespace SmartInventory.Application.Handlers
     {
         private readonly IProductRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAuditRepository _auditRepository;
+
 
         public UpdateProductHandler(
             IProductRepository repository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IAuditRepository auditRepository)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
+            _auditRepository = auditRepository;
         }
 
         public async Task<bool> Handle(
@@ -30,6 +34,12 @@ namespace SmartInventory.Application.Handlers
             product.SKU = request.SKU;
             product.Price = request.Price;
             product.QuantityInStock = request.QuantityInStock;
+
+
+            await _auditRepository.LogAsync(
+                "Update",
+                "Product",
+                $"Product updated (Id: {request.Id}): {product.Name}, SKU: {product.SKU}, Price: {product.Price}, QuantityInStock: {product.QuantityInStock}");
 
             await _unitOfWork.SaveChangesAsync();
 

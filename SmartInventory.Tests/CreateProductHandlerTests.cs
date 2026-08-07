@@ -20,6 +20,9 @@ namespace SmartInventory.Tests
                 .Setup(x => x.AddAsync(It.IsAny<Product>()))
                 .ReturnsAsync((Product p) => p);
 
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var auditRepositoryMock = new Mock<IAuditRepository>();
+
             var command =
                 new CreateProductCommand(
                     "Laptop",
@@ -30,7 +33,9 @@ namespace SmartInventory.Tests
 
             var handler =
                 new CreateProductHandler(
-                    repositoryMock.Object);
+                    repositoryMock.Object,
+                    unitOfWorkMock.Object,
+                    auditRepositoryMock.Object);
 
             // Act
 
@@ -47,7 +52,7 @@ namespace SmartInventory.Tests
                 x => x.AddAsync(It.IsAny<Product>()),
                 Times.Once);
 
-            repositoryMock.Verify(
+            unitOfWorkMock.Verify(
                 x => x.SaveChangesAsync(),
                 Times.Once);
         }
@@ -61,6 +66,10 @@ namespace SmartInventory.Tests
             repositoryMock
                 .Setup(x => x.AddAsync(It.IsAny<Product>()))
                 .ThrowsAsync(new Exception("Database error"));
+
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var auditRepositoryMock = new Mock<IAuditRepository>();
+
             var command =
                 new CreateProductCommand(
                     "Laptop",
@@ -70,7 +79,9 @@ namespace SmartInventory.Tests
                     Guid.NewGuid());
             var handler =
                 new CreateProductHandler(
-                    repositoryMock.Object);
+                    repositoryMock.Object,
+                    unitOfWorkMock.Object,
+                    auditRepositoryMock.Object);
             // Act & Assert
             Assert.ThrowsAsync<Exception>(async () =>
             {
@@ -92,6 +103,10 @@ namespace SmartInventory.Tests
             // Arrange
             var repositoryMock =
                 new Mock<IProductRepository>();
+
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var auditRepositoryMock = new Mock<IAuditRepository>();
+
             var command =
                 new CreateProductCommand(
                     "", // Invalid name
@@ -101,7 +116,9 @@ namespace SmartInventory.Tests
                     Guid.NewGuid());
             var handler =
                 new CreateProductHandler(
-                    repositoryMock.Object);
+                    repositoryMock.Object,
+                    unitOfWorkMock.Object,
+                    auditRepositoryMock.Object);
             // Act & Assert
             Assert.ThrowsAsync<ArgumentException>(async () =>
             {

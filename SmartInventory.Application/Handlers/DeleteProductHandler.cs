@@ -10,13 +10,16 @@ namespace SmartInventory.Application.Handlers
     {
         private readonly SmartInventoryDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAuditRepository _auditRepository;
 
         public DeleteProductHandler(
             SmartInventoryDbContext context,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IAuditRepository auditRepository)
         {
             _context = context;
             _unitOfWork = unitOfWork;
+            _auditRepository = auditRepository;
         }
 
         public async Task<bool> Handle(
@@ -30,6 +33,11 @@ namespace SmartInventory.Application.Handlers
                 return false;
 
             _context.Products.Remove(product);
+
+            await _auditRepository.LogAsync(
+                "DeleteProduct",            
+                "Product",                  
+                $"Product with ID {request.Id} deleted."); 
 
             await _unitOfWork.SaveChangesAsync();
 

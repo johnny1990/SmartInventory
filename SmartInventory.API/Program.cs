@@ -8,6 +8,7 @@ using SmartInventory.Application.Validators;
 using SmartInventory.Infrastructure.Interfaces;
 using SmartInventory.Infrastructure.Persistence;
 using SmartInventory.Infrastructure.Repositories;
+using SmartInventory.Infrastructure.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -68,8 +69,12 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Delet
 builder.Services.AddMediatR(cfg =>cfg.RegisterServicesFromAssembly(typeof(CreateStockMovementHandler).Assembly));
 builder.Services.AddMediatR(cfg =>cfg.RegisterServicesFromAssembly(typeof(GetStockMovementsHandler).Assembly));
 
+builder.Services.AddHttpContextAccessor();
+
 // Register Repositories
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IAuditRepository, AuditRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IStockMovementRepository, StockMovementRepository>();

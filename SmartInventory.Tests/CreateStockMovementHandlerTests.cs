@@ -13,6 +13,7 @@ namespace SmartInventory.Tests
         private Mock<IProductRepository> _productRepository = null!;
         private Mock<IStockMovementRepository> _movementRepository = null!;
         private Mock<IUnitOfWork> _unitOfWork = null!;
+        private Mock<IAuditRepository> _auditRepository = null!;
 
         private CreateStockMovementHandler _handler = null!;
 
@@ -22,11 +23,13 @@ namespace SmartInventory.Tests
             _productRepository = new Mock<IProductRepository>();
             _movementRepository = new Mock<IStockMovementRepository>();
             _unitOfWork = new Mock<IUnitOfWork>();
+            _auditRepository = new Mock<IAuditRepository>();
 
             _handler = new CreateStockMovementHandler(
                 _productRepository.Object,
                 _movementRepository.Object,
-                _unitOfWork.Object);
+                _unitOfWork.Object,
+                _auditRepository.Object);
         }
 
         [Test]

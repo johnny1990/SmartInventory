@@ -8,11 +8,17 @@ namespace SmartInventory.Application.Handlers
     public class CreateProductHandler : IRequestHandler<CreateProductCommand, Guid>
     {
         private readonly IProductRepository _repository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAuditRepository _auditRepository;
 
         public CreateProductHandler(
-            IProductRepository repository)
+            IProductRepository repository,
+            IUnitOfWork unitOfWork,
+            IAuditRepository auditRepository)
         {
             _repository = repository;
+            _unitOfWork = unitOfWork;
+            _auditRepository = auditRepository;
         }
 
         public async Task<Guid> Handle(
@@ -37,7 +43,12 @@ namespace SmartInventory.Application.Handlers
 
             await _repository.AddAsync(product);
 
-            await _repository.SaveChangesAsync();
+            await _auditRepository.LogAsync(
+            "Create",
+            "Product",
+            $"Created product '{product.Name}'");
+
+            await _unitOfWork.SaveChangesAsync();
 
             return product.Id;
         }

@@ -3,9 +3,6 @@ using SmartInventory.Application.Commands;
 using SmartInventory.Domain.Entities;
 using SmartInventory.Domain.Enums;
 using SmartInventory.Infrastructure.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SmartInventory.Application.Handlers
 {
@@ -13,19 +10,20 @@ namespace SmartInventory.Application.Handlers
         : IRequestHandler<CreateStockMovementCommand, Guid>
     {
         private readonly IProductRepository _productRepository;
-
         private readonly IStockMovementRepository _movementRepository;
-
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAuditRepository _auditRepository;
 
         public CreateStockMovementHandler(
             IProductRepository productRepository,
             IStockMovementRepository movementRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IAuditRepository auditRepository)
         {
             _productRepository = productRepository;
             _movementRepository = movementRepository;
             _unitOfWork = unitOfWork;
+            _auditRepository = auditRepository;
         }
 
         public async Task<Guid> Handle(
@@ -69,6 +67,11 @@ namespace SmartInventory.Application.Handlers
             };
 
             await _movementRepository.AddAsync(movement);
+            
+            await _auditRepository.LogAsync(
+                "Create",
+                "StockMovement",
+                $"Id={movement.Id}; Created stock movement for product '{product.Name}'");
 
             await _unitOfWork.SaveChangesAsync();
 
