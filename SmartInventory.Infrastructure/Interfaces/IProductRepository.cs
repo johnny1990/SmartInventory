@@ -10,6 +10,7 @@ namespace SmartInventory.Infrastructure.Interfaces
         Task<(List<Product> Products, int TotalCount)> GetAllAsync(ProductSearchParameters parameters);
 
         Task<Product?> GetByIdAsync(Guid id);
+        Task<Product?> GetByIdForUpdateAsync(Guid id);
 
         Task SaveChangesAsync();
     }

@@ -68,6 +68,8 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Updat
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(DeleteCategoryHandler).Assembly));
 builder.Services.AddMediatR(cfg =>cfg.RegisterServicesFromAssembly(typeof(CreateStockMovementHandler).Assembly));
 builder.Services.AddMediatR(cfg =>cfg.RegisterServicesFromAssembly(typeof(GetStockMovementsHandler).Assembly));
+builder.Services.AddMediatR(cfg =>cfg.RegisterServicesFromAssembly(typeof(GetAuditLogsHandler).Assembly));
+builder.Services.AddMediatR(cfg =>cfg.RegisterServicesFromAssembly(typeof(GetAuditLogByIdHandler).Assembly));
 
 builder.Services.AddHttpContextAccessor();
 

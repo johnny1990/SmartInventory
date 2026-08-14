@@ -87,6 +87,12 @@ namespace SmartInventory.Infrastructure.Repositories
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<Product?> GetByIdForUpdateAsync(Guid id)
+        {
+            return await _context.Products
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
