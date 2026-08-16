@@ -7,6 +7,7 @@ using SmartInventory.Infrastructure.Interfaces;
 
 namespace SmartInventory.Tests
 {
+    [NonParallelizable]
     [TestFixture]
     public class CreateStockMovementHandlerTests
     {
@@ -46,6 +47,10 @@ namespace SmartInventory.Tests
                 .Setup(x => x.GetByIdAsync(product.Id))
                 .ReturnsAsync(product);
 
+            _productRepository
+                .Setup(x => x.GetByIdForUpdateAsync(product.Id))
+                .ReturnsAsync(product);
+
             var command = new CreateStockMovementCommand(
                 product.Id,
                 5,
@@ -77,6 +82,10 @@ namespace SmartInventory.Tests
 
             _productRepository
                 .Setup(x => x.GetByIdAsync(product.Id))
+                .ReturnsAsync(product);
+
+            _productRepository
+                .Setup(x => x.GetByIdForUpdateAsync(product.Id))
                 .ReturnsAsync(product);
 
             var command = new CreateStockMovementCommand(
@@ -130,6 +139,10 @@ namespace SmartInventory.Tests
                 .Setup(x => x.GetByIdAsync(product.Id))
                 .ReturnsAsync(product);
 
+            _productRepository
+                .Setup(x => x.GetByIdForUpdateAsync(product.Id))
+                .ReturnsAsync(product);
+
             var command = new CreateStockMovementCommand(
                 product.Id,
                 10,
@@ -153,6 +166,10 @@ namespace SmartInventory.Tests
 
             _productRepository
                 .Setup(x => x.GetByIdAsync(product.Id))
+                .ReturnsAsync(product);
+
+            _productRepository
+                .Setup(x => x.GetByIdForUpdateAsync(product.Id))
                 .ReturnsAsync(product);
 
             var command = new CreateStockMovementCommand(

@@ -7,9 +7,7 @@ using SmartInventory.Infrastructure.Interfaces;
 namespace SmartInventory.Application.Handlers
 {
     public class GetAuditLogsHandler
-        : IRequestHandler<
-            GetAuditLogsQuery,
-            PagedResult<AuditLogDto>>
+        : IRequestHandler<GetAuditLogsQuery, PagedResult<AuditLogDto>>
     {
         private readonly IAuditRepository _repository;
 
@@ -43,9 +41,9 @@ namespace SmartInventory.Application.Handlers
                 Page = request.SearchParameters.Page,
                 PageSize = request.SearchParameters.PageSize,
                 TotalItems = totalCount,
-                TotalPages = (int)Math.Ceiling(
-                    totalCount /
-                    (double)request.SearchParameters.PageSize)
+                TotalPages = request.SearchParameters.PageSize > 0
+                    ? (int)Math.Ceiling((double)totalCount / request.SearchParameters.PageSize)
+                    : 0
             };
         }
     }

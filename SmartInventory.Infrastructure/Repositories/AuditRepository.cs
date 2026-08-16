@@ -40,13 +40,13 @@ namespace SmartInventory.Infrastructure.Repositories
         }
 
         public async Task<(List<AuditLog> Logs, int TotalCount)> GetAllAsync(
-            AuditLogSearchParameters parameters)
+    AuditLogSearchParameters parameters)
         {
             var query = _context.AuditLogs
                 .AsNoTracking()
                 .AsQueryable();
 
-            // General search
+            // Search across multiple fields
             if (!string.IsNullOrWhiteSpace(parameters.Search))
             {
                 query = query.Where(x =>
@@ -101,6 +101,9 @@ namespace SmartInventory.Infrastructure.Repositories
 
                 "createdat" when parameters.Descending =>
                     query.OrderByDescending(x => x.CreatedAt),
+
+                "createdat" =>
+                    query.OrderBy(x => x.CreatedAt),
 
                 _ =>
                     query.OrderByDescending(x => x.CreatedAt)

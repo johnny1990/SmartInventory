@@ -20,11 +20,11 @@ namespace SmartInventory.API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Get(
-            [FromQuery] AuditLogSearchParameters parameters)
+    [FromQuery] AuditLogSearchParameters parameters)
         {
-            var result =
+            var result = 
                 await _mediator.Send(
-                    new GetAuditLogsQuery(parameters));
+                new GetAuditLogsQuery(parameters));
 
             return Ok(result);
         }
