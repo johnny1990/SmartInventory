@@ -27,6 +27,7 @@ namespace SmartInventory.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin,Manager")]
         [HttpPost]
         public async Task<IActionResult> Create(
             CreateStockMovementCommand command)

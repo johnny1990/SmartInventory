@@ -39,6 +39,7 @@ namespace SmartInventory.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin,Manager")]
         [HttpPost]
         public async Task<IActionResult> Create(
             CreateProductCommand command)
@@ -48,6 +49,7 @@ namespace SmartInventory.API.Controllers
             return Ok(id);
         }
 
+        [Authorize(Roles = "Admin,Manager")]
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update(
     Guid id,
@@ -61,6 +63,7 @@ namespace SmartInventory.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
