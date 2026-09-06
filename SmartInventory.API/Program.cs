@@ -66,21 +66,23 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetCa
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateCategoryHandler).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(UpdateCategoryHandler).Assembly));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(DeleteCategoryHandler).Assembly));
-builder.Services.AddMediatR(cfg =>cfg.RegisterServicesFromAssembly(typeof(CreateStockMovementHandler).Assembly));
-builder.Services.AddMediatR(cfg =>cfg.RegisterServicesFromAssembly(typeof(GetStockMovementsHandler).Assembly));
-builder.Services.AddMediatR(cfg =>cfg.RegisterServicesFromAssembly(typeof(GetAuditLogsHandler).Assembly));
-builder.Services.AddMediatR(cfg =>cfg.RegisterServicesFromAssembly(typeof(GetAuditLogByIdHandler).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateStockMovementHandler).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetStockMovementsHandler).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAuditLogsHandler).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAuditLogByIdHandler).Assembly));
 
 builder.Services.AddHttpContextAccessor();
 
 // Register Repositories
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuditRepository, AuditRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IStockMovementRepository, StockMovementRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 // Register JWT Token Generator
