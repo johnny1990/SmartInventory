@@ -110,38 +110,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
         };
 
-        options.Events = new JwtBearerEvents
-        {
-            OnMessageReceived = context =>
-            {
-                Console.WriteLine("Authorization Header:");
-                Console.WriteLine(context.Request.Headers["Authorization"]);
-                return Task.CompletedTask;
-            },
-
-            OnAuthenticationFailed = context =>
-            {
-                Console.WriteLine("Authentication Failed:");
-                Console.WriteLine(context.Exception.ToString());
-                return Task.CompletedTask;
-            },
-
-            OnTokenValidated = context =>
-            {
-                Console.WriteLine("TOKEN VALIDATED");
-                return Task.CompletedTask;
-            },
-
-            OnChallenge = context =>
-            {
-                Console.WriteLine("CHALLENGE");
-                return Task.CompletedTask;
-            }
-        };
-
         options.RequireHttpsMetadata = false;
         options.SaveToken = true;
-
     });
 
 
